@@ -1,0 +1,45 @@
+version: "3.12"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: doctor_db
+      MYSQL_USER: doctor_user
+      MYSQL_PASSWORD: doctor_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
+
+  api:
+    build: .
+    ports:
+      - 8000:8000
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PYTHONUNBUFFERED: "1"
+      DATABASE_URL: mysql+pymysql://doctor_user:doctor_pass@mysql:3306/doctor_db
+    command:
+      - uvicorn
+      - app.main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+
+
+
+volumes:
+  mysql_data:
