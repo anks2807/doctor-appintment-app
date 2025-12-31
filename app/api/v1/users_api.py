@@ -11,8 +11,8 @@ from app.core.security import create_access_token, hash_password, verify_passwor
 router = APIRouter()
 
 
-@router.post("/auth/register", response_model=UserCreateDto, status_code=status.HTTP_201_CREATED)
-def register_user(user: UserDto, db: Session = Depends(get_db)):
+@router.post("/auth/register", response_model=UserDto, status_code=status.HTTP_201_CREATED)
+def register_user(user: UserCreateDto, db: Session = Depends(get_db)):
     """
     Register a new user (Doctor or Patient).
     """
