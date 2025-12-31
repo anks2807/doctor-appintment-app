@@ -1,6 +1,4 @@
 from app.db.database import session
-
-
 def get_db():
     db = session()
     try:

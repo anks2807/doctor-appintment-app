@@ -12,3 +12,5 @@ class User(Base):
     email = Column(String(100), nullable=False)
     password = Column(String(255), nullable=False)
     role = Column(Enum(UserRole, name = 'user_role_enum'), nullable=False)
+
+    availabilities = relationship("Availability", back_populates="doctor", cascade="all, delete-orphan")
