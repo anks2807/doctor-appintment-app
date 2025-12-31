@@ -4,7 +4,7 @@ from fastapi import FastAPI
 
 from app.db.database import engine
 from app.db.base import Base
-from app.api.v1 import users_api
+from app.api.v1 import users_api, doctor_api
 
 
 @asynccontextmanager
@@ -20,3 +20,4 @@ async def lifespan(app:FastAPI):
 app = FastAPI(title="Doctor Appointment API", lifespan=lifespan)
 
 app.include_router(users_api.router, prefix="/api/v1", tags=["Users"])
+app.include_router(doctor_api.router, prefix="/api/v1", tags=["Doctors"])
